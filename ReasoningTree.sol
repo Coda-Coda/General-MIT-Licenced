@@ -37,7 +37,7 @@ contract ReasoningTree {
     
     // Add a Node/Point/Idea that is either a pro or con of another Node
     function add(string memory newKeyIdea, string memory newMoreDetail, uint parent, bool supportsParent) public returns (uint thisNodeId) {
-        require(parent < nextId);
+        require(parent < nextId, "The given parent must already exist.");
         thisNodeId = nextId;
         setNextNodeDetails(thisNodeId, newKeyIdea, newMoreDetail, msg.sender);
         if (supportsParent)
@@ -51,7 +51,7 @@ contract ReasoningTree {
     
     // Retrieve the details about a given Node
     function retrieve (uint nodeId) public view returns (string memory, string memory, address, uint[] memory, uint[] memory)  {
-        require(nodeId < nextId);
+        require(nodeId < nextId, "The given node must already exist.");
         return (nodes[nodeId].keyIdea, nodes[nodeId].moreDetail, nodes[nodeId].author, nodes[nodeId].pros, nodes[nodeId].cons);
     }
     
