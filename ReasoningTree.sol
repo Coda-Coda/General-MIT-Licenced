@@ -1,14 +1,38 @@
 pragma solidity >=0.5.7 <0.6.0;
 
+/*
+MIT License
+
+Copyright (c) 2020 Daniel Britten
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
 // Facilitates a tree of points with pros and cons where only additions to the 'reasoning tree' can be made.
 contract ReasoningTree {
 
     struct Node { // Point/Idea/Content
-        string keyIdea;
-        string moreDetail;
-        address author;
-        uint[] pros;
-        uint[] cons;
+        string keyIdea; // Intended to be a brief key idea.
+        string moreDetail; // Intended to include more detail such as explanation or a URL or ipfs link with even more information.
+        address author; // Ethereum address of the person who submitted the key idea and more detail.
+        uint[] pros; // Supporting points, 'Pros', which have been added later by anyone, accessible via retrieve or getKeyIdea.
+        uint[] cons; // Negating points, 'Cons', which have been added later by anyone, accessible via retrieve or getKeyIdea.
     }
     
     mapping(uint => Node) nodes;
