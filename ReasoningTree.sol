@@ -81,6 +81,7 @@ contract ReasoningTree {
     
     // Get the key idea of a given node
     function getKeyIdea(uint nodeId) public view returns (string memory) {
+        require(nodeId < nextId, "The given node must already exist.");
         return nodes[nodeId].keyIdea;
     }
     
