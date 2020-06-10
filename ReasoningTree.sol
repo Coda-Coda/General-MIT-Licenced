@@ -41,9 +41,9 @@ contract ReasoningTree {
         thisNodeId = nextId;
         setNextNodeDetails(thisNodeId, newKeyIdea, newMoreDetail, msg.sender);
         if (supportsParent)
-            nodes[parent].pros.push(nextId);
+            nodes[parent].pros.push(thisNodeId);
         else
-            nodes[parent].cons.push(nextId);
+            nodes[parent].cons.push(thisNodeId);
         nextId = nextId + 1;
         emit ReturnValue(msg.sender, thisNodeId);
         return thisNodeId;
