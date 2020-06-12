@@ -37,6 +37,7 @@ contract ReasoningTree {
     
     mapping(uint => Node) nodes;
     uint nextId;
+    uint[] public topLevelNodes;
     event ReturnValue(address indexed _from, uint thisNodeId);
 
     constructor() public {
@@ -54,6 +55,7 @@ contract ReasoningTree {
     function addNewTopic(string memory newKeyIdea, string memory newMoreDetail) public returns (uint thisNodeId) {
         thisNodeId = nextId;
         setNextNodeDetails(thisNodeId, newKeyIdea, newMoreDetail, msg.sender);
+        topLevelNodes.push(thisNodeId);
         nextId = nextId + 1;
         emit ReturnValue(msg.sender, thisNodeId);
         return thisNodeId;
@@ -75,18 +77,20 @@ contract ReasoningTree {
     
     // Retrieve the details about a given Node
     function retrieve (uint nodeId) public view returns (string memory, string memory, address, uint[] memory, uint[] memory)  {
+        require(nodeId > 0, "NodeIds start from 1.");
         require(nodeId < nextId, "The given node must already exist.");
         return (nodes[nodeId].keyIdea, nodes[nodeId].moreDetail, nodes[nodeId].author, nodes[nodeId].pros, nodes[nodeId].cons);
     }
     
     // Get the key idea of a given node
     function getKeyIdea(uint nodeId) public view returns (string memory) {
+        require(nodeId > 0, "NodeIds start from 1.");
         require(nodeId < nextId, "The given node must already exist.");
         return nodes[nodeId].keyIdea;
     }
     
     // Get the current node count. NodeIds from 1 up to and including the node count will hold data.
     function nodeCount() public view returns (uint) {
-        return nextId - 1; // NodeIds start from one, so the count of current nodes is 1 less than nextId.
+        return nextId - 1; // NodeIds start from 1, so the count of current nodes is 1 less than nextId.
     }
 }
