@@ -46,10 +46,10 @@
       var command = new AsyncFunction(document.getElementById('command').value);
       runCommandAndLog(command);
       ">
+    <button onclick="document.getElementById('command').value = ''">Clear</button> <br>
     <textarea type="text" name="command" id="command" rows="8" cols="50"></textarea>
     <br>
     <input class="submit_button" type="submit" value="Click here to execute the Javascript Code you just entered">
-    <button onclick="document.getElementById('command').value = ''">Clear</button>
   </form>
   <br>
   <b>Output:</b> <br>
