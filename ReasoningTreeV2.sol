@@ -37,11 +37,15 @@ contract ReasoningTree {
     
     mapping(uint => Node) nodes;
     uint nextId;
-    uint[] public topLevelNodes;
+    uint[] topLevelNodes;
     event ReturnValue(address indexed _from, uint thisNodeId);
 
     constructor() public {
         nextId = 1; // Node Ids start from 1
+    }
+    
+    function getTopLevelNodes() public view returns (uint[] memory) {
+        return topLevelNodes;
     }
 
     // Sets the required details of the next node
