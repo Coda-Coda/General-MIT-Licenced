@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+
+<!--
+
+MIT License
+
+Copyright (c) 2020 Daniel Britten
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+-->
+
+<head>
+    <script src="ethers-5.0.umd.min.js"
+        integrity="sha384-XR63rSjgEtGAUiPqyr3lc6BAyN9JgrFKLrbnivkRp+xv3fE5XexgjsVM0x11x+9o"
+        crossorigin="anonymous"></script>
+
+    <script>
+        function decodeInput(abi, hexData) {
+            // Inspired by https://ethereum.stackexchange.com/a/82318
+            const inter = new ethers.utils.Interface(abi);
+            const decodedInput = inter.parseTransaction({ data: hexData });
+
+            // Decoded Transaction
+            const info = ({
+                function_name: decodedInput.name,
+                function_args: decodedInput.args
+            });
+            
+            console.log(info);
+            return info;
+        }
+
+        function getKeyValuePairs(decodedInput) {
+            return Object.entries(decodedInput.function_args).slice(decodedInput.function_args.length);
+        }
+
+        function getDecodedInputAsTable(decodedInput) {
+            let keyValuePairs = getKeyValuePairs(decodedInput)
+            let table = document.createElement('table');
+            let caption = document.createElement('caption');
+            caption.innerText = "Function Name: " + decodedInput.function_name.toString();
+            table.appendChild(caption);
+
+            let row = document.createElement('tr');
+            table.appendChild(row);
+            let headingCol1 = document.createElement('th');
+            headingCol1.innerText = "Parameter Names"
+            row.appendChild(headingCol1);
+            let headingCol2 = document.createElement('th');
+            headingCol2.innerText = "Values";
+            row.appendChild(headingCol2);
+
+            for (let i = 0; i < keyValuePairs.length; i++) {
+                const pair = keyValuePairs[i];
+                let row = document.createElement('tr');
+                table.appendChild(row);
+                let key = document.createElement('td');
+                key.innerText = pair[0].toString();
+                row.appendChild(key);
+                let value = document.createElement('td');
+                value.innerText = pair[1].toString();
+                row.appendChild(value);
+            }
+            return table;
+        }
+
+        function decode() {
+            let abi = document.getElementById('abi').value;
+            let hexData = document.getElementById('hexData').value;
+            let table = getDecodedInputAsTable(decodeInput(abi, hexData));
+            let outputSpan = document.getElementById('decodedInput');
+            outputSpan.innerText = ""; //Delete current contents
+            outputSpan.appendChild(table);
+        }
+
+    </script>
+
+<style>
+    table {
+        border-collapse: collapse;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    table,
+    th,
+    td {
+        border: 1px solid black;
+    }
+
+    caption {
+        font-weight: bold;
+        font-style: italic;
+    }
+
+    body {
+        text-align: center;
+        font-family: Arial, Helvetica, sans-serif;
+    }
+</style>
+
+</head>
+
+<body>
+
+    <h1>Contract Input Decoder</h1>
+    <a style="font-size: small;" href="https://github.com/Coda-Coda/General-MIT-Licenced/blob/master/LICENSE">Use at your own risk. PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED ... </a>
+
+    <br>
+    <br>
+    <textarea id="abi" placeholder="ABI"></textarea>
+    <br>
+    <br>
+    <textarea id="hexData" placeholder="Unsigned HEX Data"></textarea>
+    <br>
+    <br>
+    <button onclick="decode()">Decode</button>
+    <br>
+    <h2>Decoded Input:</h2>
+    <span id="decodedInput">Paste in an ABI and unsigned HEX data (such as from MetaMask's 'Data' tab after initiating a smart contract interaction).<br>Then press 'Decode'.</span>
+    <br>
+    <br>
+    <br>
+    <a href="https://github.com/Coda-Coda/General-MIT-Licenced/blob/master/LICENSE">MIT licenced</a>, powered by <a href="https://github.com/ethers-io/ethers.js">ethers.js</a> (but not affiliated with ethers.js).
+
+</body>
