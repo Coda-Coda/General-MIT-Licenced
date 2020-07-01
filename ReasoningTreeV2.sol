@@ -63,7 +63,7 @@ contract ReasoningTree {
     
     // Add a Node/Point/Idea that is either a pro or con of another Node
     function add(string memory newKeyIdea, string memory newMoreDetail, uint parent, bool supportsParent) public returns (uint thisNodeId) {
-        require(parent < nextId, "The given parent must already exist.");
+        require((0 < parent) && (parent < nextId), "The given parent must already exist.");
         thisNodeId = nextId;
         setNextNodeDetails(thisNodeId, newKeyIdea, newMoreDetail, msg.sender);
         if (supportsParent)
